@@ -8,21 +8,22 @@ app.get("/", (req: Request, res: Response) =>{
     res.send("Hello tsc-watch");
 });
 
-let usuarios = [{
-    nome: "Enildo Martins",
-    idade: 20
-}, {
-    nome: "João da Silva",
-    idade: 33
-}];
+let id = 0;
+let usuarios: {id: number, nome: string, email: string}[] = [];      
 
-
-app.get("/users", (req: Request, res: Response) =>{
+app.get("/users", (req: Request, res: Response) => {
     res.send(usuarios);
 });
 
+app.get("/users/:id", (req: Request, res: Response) => {
+    let userId = Number(req.params.id);
+    let user = usuarios.find(user => user.id === userId);
+    res.send(user);
+})
+
 app.post("/users", (req: Request, res: Response) =>{
     let user = req.body;
+    user.id = ++id;
     usuarios.push(user);
     res.send({
         message: "Usuario criado com sucesso!"
